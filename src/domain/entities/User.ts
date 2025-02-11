@@ -20,14 +20,14 @@ import {
     @Column()
     passwordHash!: string
   
-    // Nível de permissão: 'admin', 'supervisor', 'user'
+    // admin', 'supervisor', 'user'
     @Column({ default: 'user' })
     role!: string
   
     @Column({ default: false })
     twoFactorEnabled!: boolean
   
-    @Column({ type: "varchar", length: 255, nullable: true }) // ✅ ALTERADO PARA STRING
+    @Column({ type: "varchar", length: 255, nullable: true })
     twoFactorSecret: string | null;
   
     @CreateDateColumn()
