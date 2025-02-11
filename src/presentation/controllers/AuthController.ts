@@ -1,10 +1,10 @@
 import { Request, Response, NextFunction } from 'express'
-import { CreateUserUseCase } from '../../application/usecases/CreateUserUseCase'
-import { LoginUserUseCase } from '../../application/usecases/LoginUserUseCase'
-import { RequestPasswordResetUseCase } from '../../application/usecases/RequestPasswordResetUseCase'
-import { ResetPasswordUseCase } from '../../application/usecases/ResetPasswordUseCase'
-import { GenerateTwoFactorSecretUseCase } from '../../application/usecases/GenerateTwoFactorSecretUseCase'
-import { EnableTwoFactorUseCase } from '../../application/usecases/EnableTwoFactorUseCase'
+import { CreateUserUseCase } from '../../application/usecases/auth/CreateUserUseCase'
+import { LoginUserUseCase } from '../../application/usecases/auth/LoginUserUseCase'
+import { RequestPasswordResetUseCase } from '../../application/usecases/auth/RequestPasswordResetUseCase'
+import { ResetPasswordUseCase } from '../../application/usecases/auth/ResetPasswordUseCase'
+import { GenerateTwoFactorSecretUseCase } from '../../application/usecases/auth/GenerateTwoFactorSecretUseCase'
+import { EnableTwoFactorUseCase } from '../../application/usecases/auth/EnableTwoFactorUseCase'
 
 class AuthController {
   public async register(req: Request, res: Response, next: NextFunction): Promise<void> {
