@@ -29,10 +29,12 @@ class AuthController {
   }
 
   public async resetPassword(req: Request, res: Response, next: NextFunction): Promise<void> {
-    const { resetToken, newPassword } = req.body
-    const resetPasswordUseCase = new ResetPasswordUseCase()
-    const user = await resetPasswordUseCase.execute({ resetToken, newPassword })
-    res.status(200).json({ message: 'Password reset successful', userId: user.id })
+   const { email, resetCode, newPassword } = req.body; // ✅ Corrigido para usar email e código de 6 dígitos
+    const resetPasswordUseCase = new ResetPasswordUseCase();
+    const result = await resetPasswordUseCase.execute({ email, resetCode, newPassword });
+    
+    res.status(200).json(result);
+    // res.status(200).json({ message: 'Password reset successful'})
   }
 
   public async generateTwoFactorSecret(req: Request, res: Response, next: NextFunction): Promise<void> {

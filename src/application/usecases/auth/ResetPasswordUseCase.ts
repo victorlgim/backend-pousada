@@ -1,33 +1,44 @@
-import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
 import { AppError } from '../../../errors/AppError'
-import { User } from '../../../domain/entities/User'
 import { IUserRepository } from '../../../domain/repositories/IUserRepository'
 import UserRepository from '../../../infrastructure/repositories/UserRepository'
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret'
-
 interface IRequest {
-  resetToken: string
+  email: string
+  resetCode: string
   newPassword: string
 }
 
 export class ResetPasswordUseCase {
   constructor(private userRepository: IUserRepository = UserRepository) {}
 
-  public async execute({ resetToken, newPassword }: IRequest): Promise<User> {
-    let payload: any
-    try {
-      payload = jwt.verify(resetToken, JWT_SECRET)
-    } catch (error) {
-      throw new AppError('Invalid or expired reset token', 400)
-    }
-    const user = await this.userRepository.findById(payload.id)
+  public async execute({ email, resetCode, newPassword }: IRequest): Promise<{ message: string }> {
+    const user = await this.userRepository.findByEmail(email)
     if (!user) {
       throw new AppError('User not found', 404)
     }
+
+    // 🔹 Verifica se o código está correto
+    console.log(`O código de reset armazenado no banco é: >>${user.passwordResetCode}<< e o enviado no corpo da requisição é ${resetCode}`)
+
+    if (user.passwordResetCode !== resetCode) {
+      throw new AppError('Invalid reset code', 400)
+    }
+
+    // 🔹 Verifica se o código expirou
+    if (!user.passwordResetExpiresAt || user.passwordResetExpiresAt < new Date()) {
+      throw new AppError('Reset code expired', 400)
+    }
+
+    // 🔹 Atualiza a senha
     user.passwordHash = await bcrypt.hash(newPassword, 10)
+
+    // 🔹 Limpa os campos de reset para evitar reutilização
+    user.passwordResetCode = null
+    user.passwordResetExpiresAt = null
+
     await this.userRepository.update(user)
-    return user
+
+    return { message: 'Password reset successful' }
   }
 }

@@ -101,7 +101,7 @@ AuthRoutes.post(
  *                 example: testuser@example.com
  *     responses:
  *       200:
- *         description: Token de redefinição de senha enviado
+ *         description: Código de redefinição de senha enviado
  *       404:
  *         description: Usuário não encontrado
  */
@@ -124,7 +124,7 @@ AuthRoutes.post(
  *           schema:
  *             type: object
  *             properties:
- *               resetToken:
+ *               resetCode:
  *                 type: string
  *                 example: eyJhbGciOiJIUzI1...
  *               newPassword:
@@ -134,7 +134,7 @@ AuthRoutes.post(
  *       200:
  *         description: Senha redefinida com sucesso
  *       400:
- *         description: Token inválido ou expirado
+ *         description: Código inválido ou expirado
  */
 AuthRoutes.post(
   "/reset-password",
