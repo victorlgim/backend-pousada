@@ -7,6 +7,8 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import { AppDataSource } from './infrastructure/data-source';
 import authRoutes from './presentation/routes/AuthRoutes';
+import roomRoutes from './presentation/routes/RoomRoutes';
+import reservationRoutes from './presentation/routes/ReservationRoutes';
 import { handleErrors } from './errors/AppError';
 import { setupSwagger } from './infrastructure/swagger';
 
@@ -23,6 +25,8 @@ app.use(express.json());
 setupSwagger(app);
 
 app.use('/api/auth', authRoutes);
+app.use('/api/rooms', roomRoutes);
+app.use('/api/reservations', reservationRoutes);
 
 app.get('/health', (req: Request, res: Response) => {
   res.status(200).json({ status: 'API is running' });
@@ -31,7 +35,6 @@ app.get('/health', (req: Request, res: Response) => {
 app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
   handleErrors(error, req, res, next);
 });
-
 
 AppDataSource.initialize()
   .then(() => {

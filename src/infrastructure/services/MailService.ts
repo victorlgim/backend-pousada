@@ -13,7 +13,7 @@ const transporter = nodemailer.createTransport({
 export async function sendEmail(to: string, subject: string, text: string) {
   try {
     const info = await transporter.sendMail({
-      from: `"Alluvium CRM" <${process.env.SMTP_USER}>`,
+      from: `"Berço Pantaneiro" <${process.env.SMTP_USER}>`,
       to,
       subject,
       text,

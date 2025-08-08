@@ -1,3 +1,6 @@
+seed-admin.ts
+test-db.ts
+
 # Logs
 logs
 *.log

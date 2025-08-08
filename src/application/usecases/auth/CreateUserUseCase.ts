@@ -2,7 +2,7 @@ import { User, UserRole } from '../../../domain/entities/User';
 import { IUserRepository } from '../../../domain/repositories/IUserRepository';
 import UserRepository from '../../../infrastructure/repositories/UserRepository';
 import { AppError } from '../../../errors/AppError';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 
 interface IRequest {
   email: string;

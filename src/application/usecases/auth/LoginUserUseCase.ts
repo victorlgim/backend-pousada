@@ -1,5 +1,5 @@
 import { AppError } from '../../../errors/AppError'
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken'
 import { IUserRepository } from '../../../domain/repositories/IUserRepository'
 import UserRepository from '../../../infrastructure/repositories/UserRepository'

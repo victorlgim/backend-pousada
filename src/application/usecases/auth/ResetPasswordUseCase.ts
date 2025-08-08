@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcryptjs';
 import { AppError } from '../../../errors/AppError'
 import { IUserRepository } from '../../../domain/repositories/IUserRepository'
 import UserRepository from '../../../infrastructure/repositories/UserRepository'

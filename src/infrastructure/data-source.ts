@@ -2,30 +2,41 @@ import 'dotenv/config'
 import 'reflect-metadata'
 import { DataSource, DataSourceOptions } from 'typeorm'
 import { User } from '../domain/entities/User'
+import { Room } from '../domain/entities/Room'
+import { Guest } from '../domain/entities/Guest'
+import { Reservation } from '../domain/entities/Reservation'
+
+const nodeEnv = process.env.NODE_ENV || 'development'
+
+const DB_HOST = process.env.DB_HOST || process.env.POSTGRES_HOST || 'localhost'
+const DB_PORT = Number(process.env.DB_PORT || process.env.POSTGRES_PORT || 5432)
+const DB_USER = process.env.DB_USER || process.env.POSTGRES_USER || 'postgres'
+const DB_PASS = process.env.DB_PASS || process.env.POSTGRES_PASSWORD || 'postgres'
+const DB_NAME = process.env.DB_NAME || process.env.POSTGRES_DB || 'postgres'
+
+const logging = nodeEnv !== 'production'
 
 const dataSourceConfig = (): DataSourceOptions => {
-  const nodeEnv = process.env.NODE_ENV
-
   if (nodeEnv === 'test') {
     return {
       type: 'sqlite',
       database: ':memory:',
       synchronize: true,
-      entities: [__dirname + '/../domain/entities/*.{ts,js}']
+      entities: [User, Room, Guest, Reservation],
     }
   }
 
   return {
     type: 'postgres',
-    host: process.env.DB_HOST || 'localhost',
-    port: Number(process.env.DB_PORT) || 5432,
-    username: process.env.DB_USER || 'myuser',
-    password: process.env.DB_PASS || 'mypassword',
-    database: process.env.DB_NAME || 'sowadb',
+    host: DB_HOST,
+    port: DB_PORT,
+    username: DB_USER,
+    password: DB_PASS,
+    database: DB_NAME,
     synchronize: false,
-    logging: true,
-    entities: [__dirname + '/../domain/entities/*.{ts,js}'],
-    migrations: [__dirname + '/../migrations/*.{ts,js}']
+    logging,
+    entities: [User, Room, Guest, Reservation],
+    migrations: [__dirname + '/../migrations/*.{ts,js}'],
   }
 }
 

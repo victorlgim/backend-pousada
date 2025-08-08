@@ -4,17 +4,18 @@ import { AppError } from '../../errors/AppError'
 
 export const EnsureDataIsValidMiddleware = (schema: ZodSchema) => (
   req: Request,
-  res: Response,
+  _res: Response,
   next: NextFunction
 ): void => {
   try {
-    schema.parse({
-      body: req.body,
-      params: req.params,
-      query: req.query,
-    })
+    const parsed = schema.parse(req.body) // <--- valida a raiz do body
+    req.body = parsed                     // opcional: já usa o normalizado
     next()
-  } catch (error: any) {
-    next(new AppError(error.message, 400))
+  } catch (err: any) {
+    // melhora a mensagem do Zod
+    const message = err?.issues
+      ? err.issues.map((i: any) => `${i.path.join('.')}: ${i.message}`).join(' | ')
+      : err.message
+    next(new AppError(message, 400))
   }
 }
