@@ -4,28 +4,19 @@ import { z } from 'zod'
 const categoryOptions = ['Standard', 'Chalé', 'Luxo'] as const
 
 export const CreateRoomSchema = z.object({
-  body: z.object({
-    number: z.string().min(1),
-    capacity: z.number().int().min(1),
-    pricePerNight: z.number().min(0),
-    category: z.enum(categoryOptions)
-  })
+  number: z.string().min(1),
+  capacity: z.coerce.number().int().min(1),
+  pricePerNight: z.coerce.number().min(0),
+  category: z.enum(categoryOptions),
 })
 
 export const UpdateRoomSchema = z.object({
-  body: z.object({
-    number: z.string().min(1),
-    capacity: z.number().int().min(1),
-    pricePerNight: z.number().min(0),
-    category: z.enum(categoryOptions)
-  }),
-  params: z.object({
-    id: z.string().transform(Number)
-  })
+  number: z.string().min(1).optional(),
+  capacity: z.coerce.number().int().min(1).optional(),
+  pricePerNight: z.coerce.number().min(0).optional(),
+  category: z.enum(categoryOptions).optional(),
 })
 
 export const IdParamSchema = z.object({
-  params: z.object({
-    id: z.string().transform(Number)
-  })
+  id: z.coerce.number().int().positive(),
 })
